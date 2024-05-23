@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/edit.css">
+</head>
+
+<body>
+    <%-include('nav') %>
+        <section class="  mx-auto mt-14 ">
+
+
+            <form action="" method="post" class="max-w-sm mx-auto bg-slate-800 shadow-xl p-8 rounded-lg text-gray-50 ">
+                <div class="mb-5">
+                    <label for="topic" class="block mb-2 text-sm font-medium  ">Enter Topic</label>
+                    <input type="text" id="topic" name="Topic"
+                        class="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="topic" required value=<%=data[0].Topic %> />
+                </div>
+                <div class="mb-5">
+                    <label for="content" class="block mb-2 text-sm font-medium  ">Enter Content</label>
+                    <input type="text" id="content" name="Content"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required value=<%=data[0].Content %> />
+                </div>
+
+
+                <label for="des" class="block mb-2 text-sm font-medium  ">Enter Decscription</label>
+                <textarea id="des" rows="4" name="Decscription"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Leave a comment..."><%=data[0].Decscription %></textarea>
+                <button type="submit" name="submit"
+                    class="text-bg mt-8 bg-neutral hover:bg-slate-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+
+            </form>
+
+        </section>
+
+</body>
+
+</html>
