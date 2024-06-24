@@ -5,7 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/solid.min.css"> -->
+
+    
     <script>
+
+        let currentPage = 1;
+
+        function performSearch(val) {
+            console.log("this is from serach ", val)
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    console.log(this.responseText)
+                    let data2 = JSON.parse(this.responseText)
+                    updateTable(data2)
+                }
+            };
+            xmlhttp.open("GET", `http://localhost:5000/getdata?val=${val}`, true);
+            xmlhttp.send()
+        }
+
         function getData(str) {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
@@ -25,20 +45,54 @@
             tableBody.innerHTML = '';  // Clear existing table data
 
             data.forEach(element => {
-                let row = `<tr class="text-bg">
-                    <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral">${element.SrNo}</td>
-                    <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral">${element.Topic}</td>
-                    <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral">${element.Content}</td>
-                    <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral">${element.Decscription }</td>
-                    <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral">${element.Source}</td>
+                    let row = `<tr class="text-bg h-[200px]  border-b-white border">
+                    <td class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black">${element.SrNo}</td>
+                    <td class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black">${element.Topic}</td>
+                    <td class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black hover:scale-125 transition-all">${element.Content}</td>
+                    <td class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black hover:scale-125 transition-all font-semibold">${element.Decscription}</td>
+                    <td class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black">${element.Source}</td>
                     <td class="px-6 py-4 flex justify-between gap-6">
-                        <a href="/edit" class="px-4 py-2 bg-slate-600 rounded-sm text-slate-300">edit</a>
-                        <a href="/delete" class="px-4 py-2 bg-bg rounded-sm text-neutral">delete</a>
+                        <a href= "/edit/?sr=<%= data[0].SrNo %>" class="px-4 py-2 bg-neutral rounded-sm text-slate-800">edit</a>
+                        <a href="/delete" class="px-4 py-2 bg-slate-800 rounded-sm text-neutral">delete</a>
                     </td>
                    </tr>`;
                 tableBody.insertAdjacentHTML('beforeend', row);
             });
         }
+
+        function displayData(value) {
+            const xmlhttp = new XMLHttpRequest()
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState ===4 && this.status == 200){
+                    console.log(this.responseText)
+                    let response = JSON.parse(this.responseText)
+                    updateTable(response.data);
+                    currentPage = response.page
+                }
+            }
+
+            xmlhttp.open("GET" ,`http://localhost:5000/getdata?page=${value}`,true)
+            xmlhttp.send()
+            
+        }
+
+        function changePage(direction) {
+            if (direction === 'next') {
+                currentPage++;
+            } else if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+                
+            }
+            document.getElementById('pagenumber').textContent = currentPage
+            displayData(currentPage);
+        }
+
+        document.addEventListener('DOMContentLoaded',(e)=>{
+            document.getElementById('pagenumber').textContent = currentPage
+
+            displayData(currentPage)
+        })
+
 
     </script>
 </head>
@@ -49,9 +103,10 @@
 
 
 
-        <div class="overflow-x-auto overflow-y-auto max-h-[80vw] sticky top-0 shadow-lg sm:rounded-lg mx-4 mt-12 mb-12 bg-slate-300 ">
+        <div
+            class="overflow-x-auto overflow-y-auto max-h-[80vw] sticky top-0 shadow-lg sm:rounded-lg mx-4 mt-12 mb-12 bg-emerald-500 ">
             <section class="p-4 w-full sticky top-0 bg-inherit ">
-                <form method="" class="flex justify-between items-center  ">
+                <div class="flex justify-between items-center  ">
 
                     <div>
                         <select name="page" id="page" onchange="getData(this.value)">
@@ -70,49 +125,70 @@
                         <span>select</span>
 
                     </div>
-                    <div>
-                        <input type="text" placeholder="search" name="search" class="p-2 rounded-sm focus:border-none">
+                    <div class="flex justify-between w-44">
+                        <!-- <input value="prev" id="prev" type="button"
+                            class="bg-neutral text-bg py-2 px-4 rounded-sm text-sm w-16 text-center "
+                            onclick="changePage(this.value)"> -->
+
+                            <i class="fa fa-angle-left" style="font-size: 32px; cursor: pointer;" onclick="changePage('prev')" ></i>
+
+                        <div id="pagenumber" class="text-xl bg-slate-700 text-neutral rounded-full p-4 w-6 h-6 flex items-center justify-center font-bold"><p></p></div>
+
+                        <!-- <input value="next" id="next" type="button"
+                            class="bg-bg text-neutral py-2 px-4 rounded-sm text-sm w-16 text-center "
+                            onclick="changePage(this.value)"> -->
+                            <i class="fa fa-angle-right" style="font-size: 32px; cursor: pointer;" onclick="changePage('next')" ></i>
+
                     </div>
-                </form>
+
+                    <div>
+                        <input type="text" placeholder="search" name="search" class="p-2 rounded-sm focus:border-none"
+                            oninput="performSearch(this.value)">
+                    </div>
+                </div>
             </section>
             <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full border-collapse"
                 style="table-layout: fixed;">
-                <thead class="text-xs text-gray-900 uppercase bg-gray-50 ">
+                <thead class="text-xs text-gray-900 uppercase bg-gray-50  ">
                     <tr>
-                                <th scope="col" class="px-6 py-3 w-1/12 ">Srno</th>
-                                <th scope="col" class="px-6 py-3 w-1/6 ">Topic</th>
-                                <th scope="col" class="px-6 py-3 w-1/6 ">Content</th>
-                                <th scope="col" class="px-6 py-3 w-1/3 ">Decscription</th>
-                                <th scope="col" class="px-6 py-3 w-1/12 ">Source</th>
-                                <th scope="col" class="px-6 py-3 w-1/6 ">Action</th>
+                        <th scope="col" class="px-6 py-3 w-1/12 border border-l-black ">Srno</th>
+                        <th scope="col" class="px-6 py-3 w-1/6  border border-l-black">Topic</th>
+                        <th scope="col" class="px-6 py-3 w-1/6  border border-l-black">Content</th>
+                        <th scope="col" class="px-6 py-3 w-1/3  border border-l-black">Decscription</th>
+                        <th scope="col" class="px-6 py-3 w-1/12 border border-l-black ">Source</th>
+                        <th scope="col" class="px-6 py-3 w-1/6  border border-l-black ">Action</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm">
 
                     <% data.forEach(element=> { %>
-                        <tr class="text-bg  " >
+                        <tr class="text-bg h-[200px] border-b-orange-300">
 
-                            <td class="px-6 py-4 border-black odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral ">
+                            <td
+                                class="px-6 py-4 border-black odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black ">
                                 <%=element.SrNo %>
                             </td>
-                            <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral hover:scale-125 transition-all">
+                            <td
+                                class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black hover:scale-125 transition-all">
                                 <%=element.Topic %>
                             </td>
-                            <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral ">
+                            <td class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black ">
                                 <%=element.Content %>
                             </td>
-                            <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral hover:scale-125 transition-all duration-200">
+                            <td
+                                class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black hover:scale-125 transition-all duration-200 font-semibold">
                                 <%=element.Decscription %>
                             </td>
-                            <td class="px-6 py-4 odd:bg-slate-300 even:bg-gray-700 odd:text-bg even:text-neutral ">
+                            <td class="px-6 py-4 odd:bg-emerald-200 even:bg-emerald-500 odd:text-bg even:text-black ">
                                 <%=element.Source %>
                             </td>
 
-                            <td class="px-6 py-4 flex justify-between gap-6">
-                                <a href="/edit/?sr=<%= element.SrNo %>" class="px-4 py-2 bg-slate-600 rounded-sm text-slate-300">edit</a>
+                            <td class="px-6 py-4 flex justify-between items-center gap-6">
+                                <a href="/edit/?sr=<%= element.SrNo %>"
+                                    class="px-4 py-2 bg-neutral rounded-sm text-slate-800">edit</a>
 
 
-                                <a href="/delete" class="px-4 py-2 bg-neutral rounded-sm text-bg">delete</a>
+                                <a href="/delete" class="px-4 py-2 bg-slate-800 rounded-sm text-neutral">delete</a>
                             </td>
                         </tr>
 
