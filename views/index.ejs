@@ -22,7 +22,7 @@
                      updateTable(data2.data)
                 }
             };
-            xmlhttp.open("GET", `https://projecttest-0dun.onrender.com/?val=${val}`, true);
+            xmlhttp.open("GET", `https://projecttest-0dun.onrender.com/getdata/?val=${val}`, true);
             xmlhttp.send()
         }
 
@@ -36,7 +36,7 @@
                     //  alert( this.responseText);
                 }
             };
-            xmlhttp.open("GET", "https://projecttest-0dun.onrender.com/?num=" + str, true);
+            xmlhttp.open("GET", "https://projecttest-0dun.onrender.com/getdata/?num=" + str, true);
             xmlhttp.send();
         }
 
@@ -72,7 +72,7 @@
                 }
             }
 
-            xmlhttp.open("GET", `https://projecttest-0dun.onrender.com/?page=${value}`, true)
+            xmlhttp.open("GET", ` https://projecttest-0dun.onrender.com/getdata/?page=${value}`, true)
             xmlhttp.send()
 
         }
