@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index');
 const deleteRouter = require('./routes/del');
 const editRouter = require('./routes/edit');
 const app = express();
+const port = process.env.PORT;
 app.use(cors())
 
 // view engine setup
@@ -33,8 +34,8 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-app.listen(5000,()=>{
-  console.log("server is running at port 5000")
+app.listen(port,()=>{
+  console.log(`server is running at port ${port} `)
 })
 
 module.exports = app;
