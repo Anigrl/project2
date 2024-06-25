@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
   let {sr }= req.query
   console.log(sr)
   console.log(req.query)
-  con.query(`select * from tablename where SrNo ='${sr}'`,(err,result)=>{
+  con.query(`select * from tablename where SrNo =?`,[sr],(err,result)=>{
     if(!err){
       res.render('edit',{data:result})
       console.log(result , "result is")
@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
   const {sr} = req.query
   console.log(typeof(sr))
   const {Topic , Content , Decscription}  = req.body
-  con.query(`UPDATE tablename SET Topic =?, Content =?, Decscription=? WHERE SrNo='${sr}'`,[Topic,Content,Decscription], (err, result) => {
+  con.query(`UPDATE tablename SET Topic =?, Content =?, Decscription=? WHERE SrNo=?`,[Topic,Content,Decscription ,sr], (err, result) => {
       if (!err) {
           console.log(result)
           res.redirect('/');
