@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "node app.js --watch",
     "tailwind:css": "postcss public/styles/tailwind.css -o public/styles/style.css --watch"
   },
   "dependencies": {
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "ejs": "^3.1.10",
     "express": "~4.16.1",
