@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 require('dotenv').config();
 
 const createError = require('http-errors');
@@ -7,6 +8,15 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
+=======
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+
+>>>>>>> bc9a8413048ae4dd35f9865fc2fe53d27b6db115
 const indexRouter = require('./routes/index');
 const deleteRouter = require('./routes/del');
 const editRouter = require('./routes/edit');
